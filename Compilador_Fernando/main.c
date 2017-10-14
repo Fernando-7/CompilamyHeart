@@ -22,32 +22,36 @@ typedef struct a{ // estrutura que armazenará alguma coisa que n sei explicar
 }estrutura;
 
 # define palavra 2
-# define sn_maior 5
-# define sn_menor 51
-# define sn_ptvirg 6
-# define sn_caractere 40
-# define sn_ou 42
-# define sn_menos 8
-# define sn_negativo 43
-# define sn_diferente 10
-# define sn_igual 16
-# define sn_igual_igual 17
-# define sn_soma 21
-# define sn_multiplicacao 18
-# define sn_and 29
-# define sn_divisao 23
-# define sn_comentario 27
-# define sn_atribuicao 32
-# define sn_eof 13
+# define SN_maior 5
+# define SN_menor 51
+# define SN_menor_igual 4
+# define SN_maior_igual 41
+# define SN_ptvirg 6
+# define SN_caractere 40
+# define SN_ou 42
+# define SN_menos 8
+# define SN_negacao 43
+# define SN_diferente 10
+# define SN_igual 16
+# define SN_igual_igual 17
+# define SN_soma 21
+# define SN_multiplicacao 18
+# define SN_and 29
+# define SN_divisao 23
+# define SN_comentario 27
+# define SN_atribuicao 32
+# define SN_eof 13
 # define num_real 37
 # define num_inteiro 34
-# define sn_abrirParenteses 19
-# define sn_fecharParenteses 20
-# define sn_AbrirColchetes 11
-# define sn_fecharColchetes 12
-# define sn_abrirChaves 14
-# define sn_fecharChaves 7
-
+# define SN_abrirParenteses 19
+# define SN_fecharParenteses 20
+# define SN_AbrirCochetes 11
+# define SN_fecharCochetes 12
+# define SN_abrirChaves 14
+# define SN_fecharChaves 7
+# define CT_I 34
+# define CT_R 37
+# define CT_C 40
 
 
 int cont_line = 1; // conta linha
@@ -56,40 +60,6 @@ int cont_line = 1; // conta linha
 int cont_codigo = 0;
 estrutura codigo[1000];
 //-------------------------
-int check_letra(char caractere){ // Confere se o caractere é uma letra
-
-    int cont;
-    int aux =  sizeof(alfabeto)/sizeof(alfabeto[0]);
-
-    for(cont = 0; cont < aux; cont++){
-            if(caractere == alfabeto[cont]){
-                return 1;
-            }
-    }
-
-    return 0;
-}
-
-int check_marcadores(char caractere){
-
-    int cont,cont2;
-    int aux =  sizeof(operadores)/sizeof(operadores[0]);
-    int aux2 =  sizeof(sinais)/sizeof(sinais[0]);
-
-    for(cont = 0; cont < aux; cont++){
-            if(caractere == operadores[cont]){
-                return 1;
-            }
-    }
-
-    for(cont2 = 0; cont2 < aux2; cont2++){
-            if(caractere == sinais[cont2]){
-                return 1;
-            }
-    }
-
-    return 0;
-}
 
 int check_sinal(char caractere){ //checa se o solicitado é um sinal
 
@@ -110,7 +80,7 @@ void check_palavra_reservada(char *cadeia){ // confere se a palavra formada é um
     int flag = 0;
 
  //   strcpy(codigo[cont_codigo].valor,cadeia);
-
+    codigo[cont_codigo].codigo = palavra;
     for(cont = 0; cont < aux; cont++){
 
         if(strcmp(cadeia,palavras_reservadas[cont]) == 0){
@@ -265,10 +235,8 @@ void Analizador_lexico(FILE *arq){
                     ungetc(conferidor,arq);
                     estado = 2;
                 }
-
             break;
             case 2:
-
                     ungetc(conferidor,arq);
                     check_palavra_reservada(auxiliador);
                     estado = 0;
@@ -290,6 +258,7 @@ void Analizador_lexico(FILE *arq){
                     ungetc(conferidor,arq);
                     strcpy(codigo[cont_codigo].valor,auxiliador);
                     strcpy(codigo[cont_codigo].categoria,"Sinal_Menor_igual");
+                    codigo[cont_codigo].codigo = SN_menor_igual;
                     memset(&auxiliador[0],0,sizeof(auxiliador));
                     contador = 0;
                     estado = 0;
@@ -298,6 +267,7 @@ void Analizador_lexico(FILE *arq){
                     ungetc(conferidor,arq);
                     strcpy(codigo[cont_codigo].valor,auxiliador);
                     strcpy(codigo[cont_codigo].categoria,"Sinal_Maior_igual");
+                    codigo[cont_codigo].codigo = SN_maior_igual;
                     memset(&auxiliador[0],0,sizeof(auxiliador));
                     contador = 0;
                     estado = 0;
@@ -310,6 +280,7 @@ void Analizador_lexico(FILE *arq){
                     ungetc(conferidor,arq);
                     strcpy(codigo[cont_codigo].valor,auxiliador);
                     strcpy(codigo[cont_codigo].categoria,"Sinal_Maior");
+                    codigo[cont_codigo].codigo = SN_maior;
                     memset(&auxiliador[0],0,sizeof(auxiliador));
                     contador = 0;
                     estado = 0;
@@ -319,6 +290,7 @@ void Analizador_lexico(FILE *arq){
                     ungetc(conferidor,arq);
                     strcpy(codigo[cont_codigo].valor,auxiliador);
                     strcpy(codigo[cont_codigo].categoria,"Sinal_Menor");
+                    codigo[cont_codigo].codigo = SN_menor;
                     memset(&auxiliador[0],0,sizeof(auxiliador));
                     contador = 0;
                     estado = 0;
@@ -329,6 +301,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_ponto_Virgula");
+                codigo[cont_codigo].codigo = SN_ptvirg;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -339,6 +312,7 @@ void Analizador_lexico(FILE *arq){
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_fecha_chaves");
                 memset(&auxiliador[0],0,sizeof(auxiliador));
+                codigo[cont_codigo].codigo = SN_fecharChaves;
                 contador = 0;
                 estado = 0;
                 cont_codigo++;
@@ -348,6 +322,7 @@ void Analizador_lexico(FILE *arq){
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_menos");
                 memset(&auxiliador[0],0,sizeof(auxiliador));
+                codigo[cont_codigo].codigo = SN_menos;
                 contador = 0;
                 estado = 0;
                 cont_codigo++;
@@ -367,6 +342,7 @@ void Analizador_lexico(FILE *arq){
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_diferente");
                 memset(&auxiliador[0],0,sizeof(auxiliador));
+                codigo[cont_codigo].codigo = SN_diferente;
                 contador = 0;
                 estado = 0;
                 cont_codigo++;
@@ -375,6 +351,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_abre_cochetes");
+                codigo[cont_codigo].codigo = SN_AbrirCochetes;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -384,6 +361,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_fecha_cochetes");
+                codigo[cont_codigo].codigo = SN_fecharCochetes;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -396,6 +374,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_abre_chaves");
+                codigo[cont_codigo].codigo = SN_abrirChaves;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -415,6 +394,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_igual");
+                codigo[cont_codigo].codigo = SN_igual;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -424,6 +404,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_igual_igual");
+                codigo[cont_codigo].codigo = SN_igual_igual;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -433,6 +414,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_multiplicacao");
+                codigo[cont_codigo].codigo = SN_multiplicacao;
                 memset(&auxiliador[0],0,sizeof(auxiliador));;
                 contador = 0;
                 estado = 0;
@@ -441,7 +423,8 @@ void Analizador_lexico(FILE *arq){
             case 19:
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
-                strcpy(codigo[cont_codigo].categoria,"Sinal_Abrir_Aspas");
+                strcpy(codigo[cont_codigo].categoria,"Sinal_Abrir_Parenteses");
+                codigo[cont_codigo].codigo = SN_abrirParenteses;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -450,7 +433,8 @@ void Analizador_lexico(FILE *arq){
             case 20:
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
-                strcpy(codigo[cont_codigo].categoria,"Fechar_Abrir_Aspas");
+                strcpy(codigo[cont_codigo].categoria,"Sinal_Fecha_Parenteses");
+                codigo[cont_codigo].codigo = SN_fecharParenteses;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -460,6 +444,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_Soma");
+                codigo[cont_codigo].codigo = SN_soma;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -479,6 +464,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Sinal_Dividir");
+                codigo[cont_codigo].codigo = SN_divisao;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -521,6 +507,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"comentario");
+                codigo[cont_codigo].codigo = SN_comentario;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -540,6 +527,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"Operador_And");
+                codigo[cont_codigo].codigo = SN_and;
                 strcpy(auxiliador,"");
                 contador = 0;
                 estado = 0;
@@ -569,6 +557,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"atribuicao");
+                codigo[cont_codigo].codigo = SN_atribuicao;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -592,6 +581,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"inteiro");
+                codigo[cont_codigo].codigo = CT_I;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -620,6 +610,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"real");
+                codigo[cont_codigo].codigo = CT_R;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -647,6 +638,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"caractere");
+                codigo[cont_codigo].codigo = CT_C;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -665,6 +657,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                 strcpy(codigo[cont_codigo].valor,auxiliador);
                 strcpy(codigo[cont_codigo].categoria,"ou");
+                codigo[cont_codigo].codigo = SN_ou;
                 memset(&auxiliador[0],0,sizeof(auxiliador));
                 contador = 0;
                 estado = 0;
@@ -674,6 +667,7 @@ void Analizador_lexico(FILE *arq){
                 ungetc(conferidor,arq);
                     strcpy(codigo[cont_codigo].valor,auxiliador);
                     strcpy(codigo[cont_codigo].categoria,"Negacao");
+                    codigo[cont_codigo].codigo = SN_negacao;
                     memset(&auxiliador[0],0,sizeof(auxiliador));
                     contador = 0;
                     estado = 0;
@@ -681,10 +675,10 @@ void Analizador_lexico(FILE *arq){
             break;
         }
      }while(!feof(arq));
-     printf(" cont_line %d\n",cont_line);
+
      int novo;
       for(novo = 0; novo < cont_codigo;novo++){
-        printf("%s \n",codigo[novo].categoria);
+        printf("<%s,%d>\n",codigo[novo].categoria,codigo[novo].codigo);
       }
 
 }
