@@ -9,7 +9,10 @@ char sinais[]     = {'.',';',':','(',')','[',']','{','}','=','/','*'};
 char numeros []   = {'0','1','2','3','4','5','6','7','8','9'};
 char alfabeto []  = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B',
                      'C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','_'};
-
+/*
+char *amazena_ID[1000];
+int cont_id = 0;
+*/
 char *palavras_reservadas [] = {"senao","enquanto","semparam","semretorno","retorne",
                                  "inteiro","caractere","real","booleano","se","do","true","false"};
 
@@ -80,7 +83,6 @@ void check_palavra_reservada(char *cadeia){ // confere se a palavra formada é um
     int aux = sizeof(palavras_reservadas)/sizeof(palavras_reservadas[0]);
     int flag = 0;
 
- //   strcpy(codigo[cont_codigo].valor,cadeia);
     codigo[cont_codigo].codigo = palavra;
     for(cont = 0; cont < aux; cont++){
 
